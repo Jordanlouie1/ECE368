@@ -17,8 +17,8 @@ int main(int argc, char * * argv){
   double stime; //sorting time
   long *Array; //Array of numbers
   int length; //number of values
-  double Comps; //number of comparisons
-  double Moves; //number of moves
+  double Comps = 0; //number of comparisons
+  double Moves = 0; //number of moves
   int seq; //numbers in sequence
   int stored; //numbers stored  
 
@@ -42,7 +42,6 @@ int main(int argc, char * * argv){
 	stime = ((double)(end - start));
   } 
   
-  Print_Seq( argv[3], length);
   start = clock();
   stored = Save_To_File( argv[4], Array, length);
   end = clock();
@@ -53,9 +52,9 @@ int main(int argc, char * * argv){
   printf("Length if sequence: %d\n", seq);
   printf("Number of comparisons: %le", Comps);
   printf("Number of moves: %le", Moves);
-  printf("I/O time: %le", time);
-  printf("Sorting time: %le", stime);
-
+  printf("I/O time: %le", (time / CLOCKS_PER_SEC));
+  printf("Sorting time: %le", (stime / CLOCKS_PER_SEC));
+ 
   free(Array);
   return 0;
 
