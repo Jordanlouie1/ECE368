@@ -13,8 +13,8 @@ int main(int argc, char * * argv){
   clock_t start; 
   clock_t end;
 
-  double time; //io time
-  double stime; //sorting time
+  double time = 0; //io time
+  double stime = 0; //sorting time
   long *Array; //Array of numbers
   int length; //number of values
   double Comps = 0; //number of comparisons
@@ -43,7 +43,7 @@ int main(int argc, char * * argv){
   } 
   
   start = clock();
-  stored = Save_To_File( argv[4], Array, length);
+  stored = Save_To_File(argv[4], Array, length);
   end = clock();
   time += ((double)(end - start));
 

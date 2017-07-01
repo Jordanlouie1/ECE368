@@ -1,7 +1,6 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include"sorting.h"
-#include<string.h>
 
 int power(int a, int b);
 int *makeseq(int Size, int *length);
@@ -10,13 +9,15 @@ void swap(long * a, long * b);
 long *Load_From_File(char * Filename,int *Size){
   FILE * input = fopen(Filename, "r");
 
+  
   fseek(input, 0L,SEEK_END);
   int fpos = ftell(input);
   *Size = fpos / sizeof(long); //number of ints
-  rewind(input);
-
+  rewind(input); 
+  
   long * array = malloc(sizeof(long) * (*Size));
   fread(array, sizeof(long), *Size, input);
+  
   
   fclose(input);
   return array;
@@ -63,7 +64,6 @@ void Shell_Selection_Sort(long *Array, int Size, double *N_Comp, double *N_Move)
   int k;
   int l;
   int shell;
-  int temp_pos;
   int temp_low;
   int length; //length of sequence 
   int * seq = makeseq(Size, &length);
@@ -77,9 +77,9 @@ void Shell_Selection_Sort(long *Array, int Size, double *N_Comp, double *N_Move)
 		for(k = i; k < Size; k += length){ //selection sort      
 			for(l = k; l < Size; l += length){
 				temp_low = k;
-				*N_Comp++;
+				*N_Comp = *N_Comp + 1;
 			 	if(Array[k] < Array[temp_low]){
-					temp_pos = k;
+					temp_low = k;
 				}
 			}
 			if(temp_low != k){

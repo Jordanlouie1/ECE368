@@ -3,7 +3,7 @@
 
 long *Load_From_File(char *Filename, int *Size);
 
-int Save_From_File(char *Filename, long *Array);
+int Save_To_File(char *Filename, long *Array, int Size);
 
 void Shell_Insertion_Sort(long *Array, int Size, double *N_Comp, double *N_Move);
 
