@@ -1,15 +1,21 @@
 #include<stdlib.h>
 #include<stdio.h>
+#include"sorting.h"
+#include<string.h>
 
-long *Load_From_File(char*Filename,int *Size){
+int power(int a, int b);
+int *makeseq(int Size, int *length);
+void swap(long * a, long * b);
+
+long *Load_From_File(char * Filename,int *Size){
   FILE * input = fopen(Filename, "r");
 
   fseek(input, 0L,SEEK_END);
-  int fpos = ftell(fptr);
+  int fpos = ftell(input);
   *Size = fpos / sizeof(long); //number of ints
   rewind(input);
 
-  long array = malloc(sizeof(long) * (*Size));
+  long * array = malloc(sizeof(long) * (*Size));
   fread(array, sizeof(long), *Size, input);
   
   fclose(input);
@@ -19,67 +25,146 @@ long *Load_From_File(char*Filename,int *Size){
 int Save_To_File(char *Filename, long *Array, int Size){
   FILE * output = fopen(Filename, "w");
   
-  fwrite(Array, sizeof(long), Size, output);
-
+  int num = fwrite(Array, sizeof(long), Size, output);
   fclose(output);  
 
-  return 1;
+  return num;
 
 }
 
 void Shell_Insertion_Sort(long *Array, int Size, double *N_Comp, double *N_Move){
-  int i;
+/*  int i;
   int j;
   int k;
-  long temp_r = malloc(sizeof(long) * Size);  
-
-  for(j = k ; Size - 1; j++){
- 	temp_r = r[j];
-  	for(i = j; 1; i--){
-		*N_Comp++;
-		if(Array[i - 1] > Array[i]){
-			swap(&Array[i - 1], &Array[i]);
-			*N_Moves = *N_Moves + 3;
+  int shell;  
+  int length; //length of sequence 
+ 
+  int * seq = makeseq(Size, &length);
+  
+  for(j = length - 1 ;  j >= 0; j--){ //for every value in the array
+ 	shell = seq[j]; //length of shell
+  	for(i = 0;  i < shell; i++){ //for every value in the shell
+		for(k = i; k < Size; k += length){ //insertion sort        bounds are wronggggggggggggggggggggggggg
+		 	while(Array[k] < Array[k - length]){
+				*N_Comp++;
+				swap(&Array[k + length], &Array[i]);
+				*N_Move = *N_Move + 3;
+			}
 		}
-		else
-			break;
 	}
   }
-  free(temp_r);
-  
+  free(seq);
+*/  
 }
 
 void Shell_Selection_Sort(long *Array, int Size, double *N_Comp, double *N_Move){
   int i;
   int j;
+  int k;
+  int l;
+  int shell;
+  int temp_pos;
+  int temp_low;
+  int length; //length of sequence 
+  int * seq = makeseq(Size, &length);
   
-  for(i = Size - 1; 1; i--){
-	int max_index = 0;
-  	for(j = 1; i; j++){
-		if(Array[j] >= Array[max_index]){
-			max_index = j;
+  N_Comp = 0;
+  N_Move = 0;
+  
+  for(j = length - 1 ;  j >= 0; j--){ //for every value in the array
+ 	shell = seq[j]; //length of shell
+  	for(i = 0;  i < shell; i++){ //for every value in the shell
+		for(k = i; k < Size; k += length){ //selection sort      
+			for(l = k; l < Size; l += length){
+				temp_low = k;
+				*N_Comp++;
+			 	if(Array[k] < Array[temp_low]){
+					temp_pos = k;
+				}
+			}
+			if(temp_low != k){
+				swap(&Array[temp_low], &Array[k]);
+				*N_Move = *N_Move + 3;
+			}
+
+
+//high selection
+
+
+
 		}
-		swap(&Array[i], &Array[max_index]);
 	}
+  }
+  free(seq);
+ 
+}
+int Print_Seq(char *Filename, int Size){
+  int length;
+  int i;
+  FILE * output = fopen(Filename, "w");
+
+  int * seq = makeseq(Size, &length);
+
+  for(i = 0; i < length; i++){
+  	fprintf(output,"%d\n", seq[i]);
 
   }
 
+  fclose(output);
+  free(seq);
+  return length;
 }
 
-int Print_Seq(char *Filename, int Size){
+int * makeseq(int Size, int * length){
+  int lev = 0;
+  int large = 0;
+  int i = 0; //position in array
+  int * seq = NULL;
+  int p;
+  int q;
+  int temp;
 
-  printf("Number of long integers read: %d\n", read);
-  printf("Number of long integers stored: %d\n", strd);
-  printf("Length if sequence: %d\n", len);
-  printf("Number of comparisons: %le", comps);
-  printf("Number of moves: %le", moves);
-  printf("I/O time: %le", time);
-  printf("Sorting time: %le", stime);
+  while(large < Size){
+	q = 0;
+	for(p = lev; p >= 0; p--){		
+		temp = power(2,p) * power(3,q);
+		if(temp > large){
+			large = temp;
+			if(large >= Size){
+				break;
+			}
+		}
+		seq = realloc(seq, ((i + 1) * sizeof(int)));
+		seq[i] = temp;
+		q++;
+		i++;
+	}		
+	lev++;
+	
+  }
+  *length = i;
+  return seq;
 
 }
+ 
+int power(int a, int b){
 
-void swap(long *Array1, long *Array2){
+  int i;
+  int num = 1;
+  if(b == 0){
+	return 1;
+  }
+  for(i = 0; i < b; ++i){
+	num *= a;
+  }
+
+  return num;
+}
+
+
+
+void swap(long * Array1, long * Array2){
   long temp = *Array1;
   *Array1 = *Array2;
-  *Array2 = temp
+  *Array2 = temp;
 }

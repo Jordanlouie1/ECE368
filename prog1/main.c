@@ -20,7 +20,7 @@ int main(int argc, char * * argv){
   double Comps = 0; //number of comparisons
   double Moves = 0; //number of moves
   int seq; //numbers in sequence
-  int stored; //numbers stored  
+  int stored = 0; //numbers stored  
 
 
   start = clock();
@@ -29,13 +29,13 @@ int main(int argc, char * * argv){
   end = clock();
   time = ((double)(end - start));
 
-  if(argv[1] == "i"){
+  if(argv[1][0] == 'i'){
 	start = clock();
 	Shell_Insertion_Sort( Array, length, &Comps, &Moves);
   	end = clock();
 	stime = ((double)(end - start));
   }
-  if(argv[1] == "s"){
+  if(argv[1][0] == 's'){
 	start = clock();
 	Shell_Selection_Sort( Array, length, &Comps, &Moves);	
    	end = clock();
