@@ -3,7 +3,7 @@
 #include<time.h>
 #include"sorting.h"
 
-int main(int argc, char * * argv){
+int main(int argc, char ** argv){
   //argv[0]: excecutable, ./proj1
   //argv[1]: type of sort, i or s
   //argv[2]: input file name, #.b
@@ -13,10 +13,10 @@ int main(int argc, char * * argv){
   clock_t start; 
   clock_t end;
 
-  double time = 0; //io time
-  double stime = 0; //sorting time
+  double iot = 0; //io time
+  double st = 0; //sorting time
   long *Array; //Array of numbers
-  int length; //number of values
+  int length = 0; //number of values
   double Comps = 0; //number of comparisons
   double Moves = 0; //number of moves
   int seq; //numbers in sequence
@@ -24,36 +24,36 @@ int main(int argc, char * * argv){
 
 
   start = clock();
-  Array = Load_From_File( argv[2], &length); 
+  Array = Load_From_File(argv[2], &length); 
   seq = Print_Seq(argv[3], length);
   end = clock();
-  time = ((double)(end - start));
-
+  iot = ((double)(end - start));
+  //insertion or selection 
   if(argv[1][0] == 'i'){
 	start = clock();
 	Shell_Insertion_Sort( Array, length, &Comps, &Moves);
   	end = clock();
-	stime = ((double)(end - start));
+	st = ((double)(end - start));
   }
   if(argv[1][0] == 's'){
 	start = clock();
 	Shell_Selection_Sort( Array, length, &Comps, &Moves);	
    	end = clock();
-	stime = ((double)(end - start));
+	st = ((double)(end - start));
   } 
   
   start = clock();
   stored = Save_To_File(argv[4], Array, length);
   end = clock();
-  time += ((double)(end - start));
+  iot += ((double)(end - start));
 
-  printf("Number of long integers read: %d\n", length);
+  printf("\nNumber of long integers read: %d\n", length);
   printf("Number of long integers stored: %d\n", stored);
   printf("Length if sequence: %d\n", seq);
-  printf("Number of comparisons: %le", Comps);
-  printf("Number of moves: %le", Moves);
-  printf("I/O time: %le", (time / CLOCKS_PER_SEC));
-  printf("Sorting time: %le", (stime / CLOCKS_PER_SEC));
+  printf("Number of comparisons: %le\n", Comps);
+  printf("Number of moves: %le\n", Moves);
+  printf("I/O time: %le\n", (iot / CLOCKS_PER_SEC));
+  printf("Sorting time: %le\n", (st / CLOCKS_PER_SEC));
  
   free(Array);
   return 0;

@@ -3,28 +3,28 @@
 #include"sorting.h"
 
 int power(int a, int b);
-int *makeseq(int Size, int *length);
+int* makeseq(int Size, int *length);
 void swap(long * a, long * b);
 
 long *Load_From_File(char * Filename,int *Size){
-  FILE * input = fopen(Filename, "r");
-
+  FILE * input = fopen(Filename,"rb");
+  if(input == NULL){
+	printf("open error");
+  }
   
-  fseek(input, 0L,SEEK_END);
-  int fpos = ftell(input);
-  *Size = fpos / sizeof(long); //number of ints
-  rewind(input); 
-  
+  fseek(input, 0, SEEK_END);
+  long fpos = ftell(input);
+  *Size = (int)(fpos / sizeof(long)); //number of ints
+  rewind(input); // jump to beginning 
   long * array = malloc(sizeof(long) * (*Size));
   fread(array, sizeof(long), *Size, input);
-  
-  
   fclose(input);
+  
   return array;
 }
 
 int Save_To_File(char *Filename, long *Array, int Size){
-  FILE * output = fopen(Filename, "w");
+  FILE * output = fopen(Filename, "wb");
   
   int num = fwrite(Array, sizeof(long), Size, output);
   fclose(output);  
@@ -34,28 +34,41 @@ int Save_To_File(char *Filename, long *Array, int Size){
 }
 
 void Shell_Insertion_Sort(long *Array, int Size, double *N_Comp, double *N_Move){
-/*  int i;
+  int i;
   int j;
   int k;
-  int shell;  
+  int l;
+  int shell; //shell gap
+  int temp_low;  //lowerst index
   int length; //length of sequence 
- 
   int * seq = makeseq(Size, &length);
+  *N_Comp = 0;
+  *N_Move = 0;
   
   for(j = length - 1 ;  j >= 0; j--){ //for every value in the array
  	shell = seq[j]; //length of shell
   	for(i = 0;  i < shell; i++){ //for every value in the shell
-		for(k = i; k < Size; k += length){ //insertion sort        bounds are wronggggggggggggggggggggggggg
-		 	while(Array[k] < Array[k - length]){
-				*N_Comp++;
-				swap(&Array[k + length], &Array[i]);
-				*N_Move = *N_Move + 3;
+		for(k = i; k < (Size - shell); k += shell){
+			*N_Comp = *N_Comp + 1;
+			if(Array[k + shell] < Array[k]){
+				swap(&Array[k + shell], &Array[k]);
+				*N_Move = *N_Move + 3;			
 			}
 		}
+		for((k = Size-shell-1); k >= i; k -= shell){ //insertion sort      
+			temp_low = Array[k];
+			l = k;
+			while(Array[l ] > temp_low){
+				Array[l] = Array[l - 1];
+				l = l - 1;
+			}
+		Array[l] = temp_low;
+		}
+		
 	}
   }
   free(seq);
-*/  
+ 
 }
 
 void Shell_Selection_Sort(long *Array, int Size, double *N_Comp, double *N_Move){
@@ -67,31 +80,25 @@ void Shell_Selection_Sort(long *Array, int Size, double *N_Comp, double *N_Move)
   int temp_low;
   int length; //length of sequence 
   int * seq = makeseq(Size, &length);
-  
-  N_Comp = 0;
-  N_Move = 0;
+  *N_Comp = 0;
+  *N_Move = 0;
   
   for(j = length - 1 ;  j >= 0; j--){ //for every value in the array
  	shell = seq[j]; //length of shell
   	for(i = 0;  i < shell; i++){ //for every value in the shell
-		for(k = i; k < Size; k += length){ //selection sort      
-			for(l = k; l < Size; l += length){
-				temp_low = k;
+		for(k = i; k < Size; k += shell){ //selection sort      
+			temp_low = k; 
+			for(l = k; l < Size; l += shell){
 				*N_Comp = *N_Comp + 1;
-			 	if(Array[k] < Array[temp_low]){
-					temp_low = k;
+			 	if(Array[l] < Array[temp_low]){
+					temp_low = l;
 				}
 			}
 			if(temp_low != k){
 				swap(&Array[temp_low], &Array[k]);
 				*N_Move = *N_Move + 3;
 			}
-
-
-//high selection
-
-
-
+//backwards
 		}
 	}
   }
@@ -102,7 +109,6 @@ int Print_Seq(char *Filename, int Size){
   int length;
   int i;
   FILE * output = fopen(Filename, "w");
-
   int * seq = makeseq(Size, &length);
 
   for(i = 0; i < length; i++){
@@ -115,11 +121,11 @@ int Print_Seq(char *Filename, int Size){
   return length;
 }
 
-int * makeseq(int Size, int * length){
+int* makeseq(int Size, int * length){
   int lev = 0;
   int large = 0;
   int i = 0; //position in array
-  int * seq = NULL;
+  int *seq = NULL; //initialize sequence
   int p;
   int q;
   int temp;
@@ -146,7 +152,7 @@ int * makeseq(int Size, int * length){
   return seq;
 
 }
- 
+ //power function
 int power(int a, int b){
 
   int i;
@@ -162,7 +168,7 @@ int power(int a, int b){
 }
 
 
-
+//swap function
 void swap(long * Array1, long * Array2){
   long temp = *Array1;
   *Array1 = *Array2;
