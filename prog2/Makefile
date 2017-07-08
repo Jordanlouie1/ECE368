@@ -1,13 +1,17 @@
 CFLAGS = -Wall -Wshadow -O3 -Werror  
 GCC = gcc $(CFLAGS)
 OBJS = main.o sorting.o 
+OBJS2 = test.o sorting.o
 VALGRIND = valgrind --tool=memcheck --leak-check=full --show-reachable=yes -v 
 
 .c.o: 
 	$(GCC) -c $*.c
 
-all: $(OBJS) sorting.h
-	$(GCC) $(OBJS) -o proj1
+all: $(OBJS2) sorting.h
+	$(GCC) $(OBJS2) -o proj2
+
+current: all
+	./proj2 test/15.b out/15s.b
 
 test: all
 	./proj1 i 15.b 15_seq.t 15s.b

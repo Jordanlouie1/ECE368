@@ -6,29 +6,36 @@ int power(int a, int b);
 int* makeseq(int Size, int *length);
 void swap(long * a, long * b);
 
+
 Node *Load_From_File(char * Filename){
   FILE * input = fopen(Filename,"rb");
   if(input == NULL){
 	printf("open error");
   }
 
-  Node* head = malloc(sizeof(Node));
-  List begin;
-  begin.node = head;
-  while(fread(&(head->value), sizeof(long), 1, input) == 1){
-	head->next = malloc(sizeof(Node));// 1 extra
-  	head = head->next;
+  Node* head = NULL; //head of the list
+  Node* cur = NULL;
+  long temp = 0; //number is stored
+
+  while(fread(&temp, sizeof(long), 1, input) == 1){
+  	cur = malloc(sizeof(Node));
+	cur->value = temp;
+	cur->next = head;
+	head = cur;
+	printf("\n%ld",cur->value);
   }
+printf("diwjewh");
   fclose(input);
   
-  return begin.node;
+  return head;
 }
 
 int Save_To_File(char *Filename, Node* list){
   FILE * output = fopen(Filename, "wb");
   
-  while(list->next != NULL){ 
-  	fwrite(list->value, sizeof(long), 1, output);
+  while(list != NULL){ 
+  	fwrite(&list->value, sizeof(long), 1, output);
+	printf("\n%ld",list->value);
 	list = list->next;
   }
   fclose(output);  
@@ -37,56 +44,21 @@ int Save_To_File(char *Filename, Node* list){
 
 }
 
-Node* Shell_Sort(long *Array, int Size, double *N_Comp, double *N_Move){
-  int i;
-  int j;
-  int k;
-  int l;
-  int shell; //shell gap
-  int temp_low;  //lowerst index
-  int length; //length of sequence 
-  int * seq = makeseq(Size, &length);
-  *N_Comp = 0;
-  *N_Move = 0;
+Node* Shell_Sort(Node *head){
+  Node* temp = head; //temporary head
+  int ct = 0; //num of longs
+
+
+  while(head != NULL){
+	temp = temp->next;
+	ct++; // might be behind 1
+  }
+  printf("\n%d", ct);
+//  Node* seq = makeseq(ct);
   
-  makeseq();
-
-  while(seq != NULL){ //for every value in the seqence
-	shell = list.value; //length of shell maybeeeeeeeeeeeeeeeeeeeeeeeee
-		while(linkedlist != NULL){//selectionsort
-			selectionsort(linkedlist->*node);
-			freelist
-
-	}
-	seq = seq->next;
-  }
-
-  for(j = length - 1 ;  j >= 0; j--){ //for every value in the array
- 	shell = seq[j]; //length of shell
-  	for(i = 0;  i < shell; i++){ //for every value in the shell
-		for(k = i; k < (Size - shell); k += shell){
-			*N_Comp = *N_Comp + 1;
-			if(Array[k + shell] < Array[k]){
-				swap(&Array[k + shell], &Array[k]);
-				*N_Move = *N_Move + 3;			
-			}
-		}
-		for((k = Size-shell-1); k >= i; k -= shell){ //insertion sort      
-			temp_low = Array[k];
-			l = k;
-			while(Array[l ] > temp_low){
-				Array[l] = Array[l - 1];
-				l = l - 1;
-			}
-		Array[l] = temp_low;
-		}
-		
-	}
-  }
-  free(seq);
- 
+  return 0; 
 }
-
+/*
 Node* makeseq(int Size){
   int lev = 0;
   int large = 0;
@@ -141,3 +113,9 @@ void swap(long * Array1, long * Array2){
   *Array1 = *Array2;
   *Array2 = temp;
 }
+
+void buildlist(){
+
+
+
+*/
