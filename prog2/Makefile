@@ -7,11 +7,12 @@ VALGRIND = valgrind --tool=memcheck --leak-check=full --show-reachable=yes -v
 .c.o: 
 	$(GCC) -c $*.c
 
-all: $(OBJS2) sorting.h
-	$(GCC) $(OBJS2) -o proj2
+all: $(OBJS) sorting.h
+	$(GCC) $(OBJS) -o proj2
 
-current: all
+current: all 
 	./proj2 test/15.b out/15s.b
+	./proj2 test/1000.b out/1000s.b
 
 test: all
 	./proj1 i 15.b 15_seq.t 15s.b
@@ -34,8 +35,8 @@ compare: all
 
 
 memory: all
-	$(VALGRIND) ./proj1 s test/15.b test/15_seq.t test/15s.b	
-	$(VALGRIND) ./proj1 i test/15.b test/15_seq.t test/15s.b 
+	$(VALGRIND) ./proj2 test/15.b test/15s.b	
+##	$(VALGRIND) ./proj2 test/15.b test/15s.b 
 clean:
 	/bin/rm -f *.o
 	/bin/rm -f *.gcda *.gcno gmon.out *gcov

@@ -3,6 +3,8 @@
 #include<time.h>
 #include"sorting.h"
 
+Node* makeseq(int);
+
 int main(int argc, char ** argv){
   //argv[0]: excecutable, ./proj2
   //argv[1]: input file name, #.b
@@ -12,32 +14,46 @@ int main(int argc, char ** argv){
   clock_t end;
 
   double iot = 0; //io time
-  double st = 0; //sorting time
-  //int stored;
-  Node *head; //head of list
+  Node *head; //head of unsorted list
+  Node *sorted; //head of sorted list
 
   //load output
   start = clock();
   head = Load_From_File(argv[1]); 
   end = clock();
   iot = ((double)(end - start));
-
-  //insertion 
-  start = clock();
-  Shell_Sort(head);
-  end = clock();
-  st = ((double)(end - start));
   
-  //save output
+ 
+  sorted = Shell_Sort(head);
+
   start = clock();
-  Save_To_File(argv[2], head);
+  int i = Save_To_File(argv[2], sorted);
   end = clock();
   iot += ((double)(end - start));
+
+
+  printf("\nIO Time: %le\n", iot);
+  printf("%ld %d", head->value, i);
+
+  Node * temp = sorted;
   
-  printf("\nI/O time: %le\n", (iot / CLOCKS_PER_SEC));
-  printf("Sorting time: %le\n", (st / CLOCKS_PER_SEC));
- 
-  free(head);
+  while(sorted != NULL){
+  	sorted = sorted->next;
+	free(temp);
+	temp = sorted;
+
+  }
+
+  /*temp = head;
+
+  while(head != NULL){
+  	head = head->next;
+	free(temp);
+	temp = sorted;
+
+  }
+
+*/
   return 0;
 
 }

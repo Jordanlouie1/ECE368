@@ -3,7 +3,7 @@
 #include"sorting.h"
 
 int power(int a, int b);
-int* makeseq(int Size, int *length);
+Node* makeseq(int Size);
 void swap(long * a, long * b);
 
 
@@ -22,9 +22,7 @@ Node *Load_From_File(char * Filename){
 	cur->value = temp;
 	cur->next = head;
 	head = cur;
-	printf("\n%ld",cur->value);
   }
-printf("diwjewh");
   fclose(input);
   
   return head;
@@ -32,43 +30,58 @@ printf("diwjewh");
 
 int Save_To_File(char *Filename, Node* list){
   FILE * output = fopen(Filename, "wb");
-  
-  while(list != NULL){ 
-  	fwrite(&list->value, sizeof(long), 1, output);
-	printf("\n%ld",list->value);
-	list = list->next;
+  int stored = 0; 
+  Node * curnode = list;
+
+  while(curnode != NULL){ 
+  	fwrite(&curnode->value, sizeof(long), 1, output);
+	curnode = curnode->next;
+	stored++;
   }
+
   fclose(output);  
 
-  return 1;
+  return stored;
 
 }
 
 Node* Shell_Sort(Node *head){
   Node* temp = head; //temporary head
   int ct = 0; //num of longs
-
-
-  while(head != NULL){
+  int row = 0;
+  while(temp != NULL){
 	temp = temp->next;
-	ct++; // might be behind 1
+	ct++; 
   }
-  printf("\n%d", ct);
-//  Node* seq = makeseq(ct);
+  temp = head;
+  Node* seq = makeseq(ct);
+  Node* freedom = seq;
+  long gap = 0;
+
+  //pop and free
+  while(seq != null){
+  	gap = seq->value;
+	for(row = 0; row < gap; row++){
+  //create k lists
+  		
+  		
+  //sort each k
   
-  return 0; 
+
+	
+  }
+
+  return seq; 
 }
-/*
+
 Node* makeseq(int Size){
   int lev = 0;
   int large = 0;
-  int i = 0; //position in array
-  Node * curnode; //initialize sequence
-  Node * head = curnnode;
+  Node * curnode = NULL; //initialize sequence
+  Node * head = curnode;
   int p;
   int q;
   long temp;
-
   while(large < Size){
 	q = 0;
 	for(p = lev; p >= 0; p--){		
@@ -79,16 +92,17 @@ Node* makeseq(int Size){
 				break;
 			}
 		}
+		curnode = malloc(sizeof(Node));
 		curnode->value = temp;
-		curnode->next = malloc(sizeof(Node));
-		curnode = curnode->next;
+		curnode->next = head;
+		head = curnode;
 		q++;
 	}		
 	lev++;
 	
   }
-  
-  return head;
+	
+  return curnode;
 
 }
  //power function
@@ -114,8 +128,7 @@ void swap(long * Array1, long * Array2){
   *Array2 = temp;
 }
 
-void buildlist(){
 
 
 
-*/
+
