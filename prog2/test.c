@@ -1,54 +1,37 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<math.h>
+#include<time.h>
+#include"sorting.h"
 
-int main(){
+int main(int argc, char ** argv){
+  //argv[0]: excecutable, ./proj2
+  //argv[1]: input file name, #.b
+  //argv[2]: output file name, #.b
 
-  
-typedef struct Node{
-	long value;
-	struct Node* next;
-}Node;
+  clock_t start; 
+  clock_t end;
+
+  double iot = 0; //io time
+  Node *head; //head of unsorted list
+//  Node *sorted; //head of sorted list
+
+  //load output
+  start = clock();
+  head = Load_From_File(argv[1]); 
+  end = clock();
+  iot = ((double)(end - start));
+ /* 
+  sorted = Shell_Sort(head);
+*/
+  start = clock();
+  Save_To_File (argv[2], head);
+  end = clock();
+  iot += ((double)(end - start));
 
 
+  printf("\nIO Time: %le\n", iot);
+  printf("%ld", head->value);
 
-  int lev = 0;
-  int large = 0;
-  int i = 0; //position in array
-  int * seq = NULL;
-  int p;
-  int q;
-  int Size = 15;
-  int temp;
-  Node * curnode;
-  printf("\nEnter Size:");
-  scanf("%d", &Size);
-
-  while(large < Size){
-	q = 0;
-	for(p = lev; p >= 0; p--){		
-		temp = pow(2,p) * pow(3,q);
-		if(temp > large){
-			large = temp;
-			if(large >= Size){
-				break;
-			}
-		}
-		curnode->value = temp;
-		curnode->next = malloc(sizeof(Node));
-		curnode = curnode->next;
-		q++;
-	printf("%ld\n",curnode->next->value);
-	}		
-	lev++;
-	
-  }
-
-  printf("\n%d\n", i);
+  return 0;
 
 }
- 
-
-
-
-

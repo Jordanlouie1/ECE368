@@ -3,8 +3,9 @@
 #include"sorting.h"
 
 int power(int a, int b);
-int* makeseq(int Size, int *length);
+Node* makeseq(int Size);
 void swap(long * a, long * b);
+
 
 Node *Load_From_File(char * Filename){
   FILE * input = fopen(Filename,"rb");
@@ -12,91 +13,75 @@ Node *Load_From_File(char * Filename){
 	printf("open error");
   }
 
-  Node* head = malloc(sizeof(Node));
-  List begin;
-  begin.node = head;
-  while(fread(&(head->value), sizeof(long), 1, input) == 1){
-	head->next = malloc(sizeof(Node));// 1 extra
-  	head = head->next;
+  Node* head = NULL; //head of the list
+  Node* cur = NULL;
+  long temp = 0; //number is stored
+
+  while(fread(&temp, sizeof(long), 1, input) == 1){
+  	cur = malloc(sizeof(Node));
+	cur->value = temp;
+	cur->next = head;
+	head = cur;
   }
   fclose(input);
   
-  return begin.node;
+  return head;
 }
 
 int Save_To_File(char *Filename, Node* list){
   FILE * output = fopen(Filename, "wb");
-  
-  while(list->next != NULL){ 
-  	fwrite(list->value, sizeof(long), 1, output);
-	list = list->next;
+  int stored = 0; 
+  Node * curnode = list;
+
+  while(curnode != NULL){ 
+  	fwrite(&curnode->value, sizeof(long), 1, output);
+	curnode = curnode->next;
+	stored++;
   }
+
   fclose(output);  
 
-  return 1;
+  return stored;
 
 }
 
-Node* Shell_Sort(long *Array, int Size, double *N_Comp, double *N_Move){
-  int i;
-  int j;
-  int k;
-  int l;
-  int shell; //shell gap
-  int temp_low;  //lowerst index
-  int length; //length of sequence 
-  int * seq = makeseq(Size, &length);
-  *N_Comp = 0;
-  *N_Move = 0;
+Node* Shell_Sort(Node *head){
+  Node* temp = head; //temporary head
+  int ct = 0; //num of longs
+  int row = 0;
+  while(temp != NULL){
+	temp = temp->next;
+	ct++; 
+  }
+  temp = head;
+  Node* seq = makeseq(ct);
+  Node* freedom = seq;
+  long gap = 0;
+
+  //pop and free
+  while(seq != null){
+  	gap = seq->value;
+	for(row = 0; row < gap; row++){
+  //create k lists
+  		
+  		
+  //sort each k
   
-  makeseq();
 
-  while(seq != NULL){ //for every value in the seqence
-	shell = list.value; //length of shell maybeeeeeeeeeeeeeeeeeeeeeeeee
-		while(linkedlist != NULL){//selectionsort
-			selectionsort(linkedlist->*node);
-			freelist
-
-	}
-	seq = seq->next;
+	
   }
 
-  for(j = length - 1 ;  j >= 0; j--){ //for every value in the array
- 	shell = seq[j]; //length of shell
-  	for(i = 0;  i < shell; i++){ //for every value in the shell
-		for(k = i; k < (Size - shell); k += shell){
-			*N_Comp = *N_Comp + 1;
-			if(Array[k + shell] < Array[k]){
-				swap(&Array[k + shell], &Array[k]);
-				*N_Move = *N_Move + 3;			
-			}
-		}
-		for((k = Size-shell-1); k >= i; k -= shell){ //insertion sort      
-			temp_low = Array[k];
-			l = k;
-			while(Array[l ] > temp_low){
-				Array[l] = Array[l - 1];
-				l = l - 1;
-			}
-		Array[l] = temp_low;
-		}
-		
-	}
-  }
-  free(seq);
- 
+  return seq; 
 }
 
 Node* makeseq(int Size){
   int lev = 0;
   int large = 0;
-  int i = 0; //position in array
-  Node * curnode; //initialize sequence
-  Node * head = curnnode;
+  Node * curnode = NULL; //initialize sequence
+  Node * head = curnode;
   int p;
   int q;
   long temp;
-
   while(large < Size){
 	q = 0;
 	for(p = lev; p >= 0; p--){		
@@ -107,16 +92,17 @@ Node* makeseq(int Size){
 				break;
 			}
 		}
+		curnode = malloc(sizeof(Node));
 		curnode->value = temp;
-		curnode->next = malloc(sizeof(Node));
-		curnode = curnode->next;
+		curnode->next = head;
+		head = curnode;
 		q++;
 	}		
 	lev++;
 	
   }
-  
-  return head;
+	
+  return curnode;
 
 }
  //power function
@@ -141,3 +127,8 @@ void swap(long * Array1, long * Array2){
   *Array1 = *Array2;
   *Array2 = temp;
 }
+
+
+
+
+
