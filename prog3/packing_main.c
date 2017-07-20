@@ -10,8 +10,11 @@ int main(int argc, char** argv){
 
 	FILE * input = fopen(argv[1], "r");
 	tnode * tree = buildtree(input);
-	printTree(tree);
-	
+	int totalheight = 0;
+	int totalwidth = 0;
+	packtree(tree, totalwidth, totalheight);
+//	printTree(tree);
+	freetree(tree);	
 	return 0;	
 }
 
